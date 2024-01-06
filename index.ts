@@ -235,7 +235,10 @@ app.get('/', async (c) => {
 app.notFound((c) => c.text('Custom 404 Message', 404));
 app.onError((err, c) => c.text('Custom Error Message', 500));
 
+const bunInstanceId = parseInt((Bun.env.NODE_APP_INSTANCE || 0).toString());
+const basePort = parseInt((Bun.env.PORT || 0).toString());
+const PORT = basePort + bunInstanceId;
 export default {
-  port: 3000,
+  port: PORT,
   fetch: app.fetch,
 };
