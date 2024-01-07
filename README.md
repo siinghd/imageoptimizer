@@ -1,6 +1,6 @@
 # Image Processing Service
 
-This service provides various image processing capabilities via a simple API.
+This service offers a variety of image processing capabilities through a simple API, including dynamic text rendering on images.
 
 ## How to Use
 
@@ -9,20 +9,36 @@ Make a GET request to the service with the desired query parameters. For example
 ```
 https://images.hsingh.site/?url=<image_url>&w=300&h=200&q=75
 ```
+
+Or, to render text on an image:
+
+```
+https://images.hsingh.site/?text=hello%20world&w=400&h=200&fontFamily=Courier%20New&roundedCorners=true&txtColor=red&fontSize=42
+```
+
 ## Support
 
-If you find this service helpful, consider supporting the development:
+If you find this service helpful, consider supporting its development:
 
 [![Donate](https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif)](https://paypal.me/hsiingh)
 
 Thank you for your support!
+
 ## Query Parameters
 
-- `url`:  The URL of the image to process.
-- `w`: Width of the image in pixels. Default: Original image width.
-- `h`: Height of the image in pixels. Default: Original image height.
+- `url`: The URL of the image to process.
+- `text`: Text to render on the image. Default: None.
+- `w`: Width of the image in pixels. Default: Original image width or 800 for text rendering.
+- `h`: Height of the image in pixels. Default: Original image height or 800 for text rendering.
 - `dpr`: Device Pixel Ratio. Default: 1.
-- `bg`: Background color in hex format (e.g., `#ffffff`). Default: None (transparent background).
+- `bg`: Background color in hex format (e.g., `#ffffff`). Default: None (transparent background) or white for text rendering.
+- `txtColor`: Text color in hex format. Default: `#000000` (black).
+- `fontSize`: Font size for text rendering. Default: 48.
+- `fontFamily`: Font family for text rendering. Default: Arial.
+- `textAlign`: Text alignment (`left`, `center`, `right`). Default: `center`.
+- `textBaseline`: Vertical alignment of text (`top`, `hanging`, `middle`, `alphabetic`, `ideographic`, `bottom`). Default: `middle`.
+- `roundedCorners`: Whether to have rounded corners (true/false). Default: false.
+- `cornerRadius`: Radius of the corners if `roundedCorners` is true. Default: 20.
 - `blur`: Blur amount. Range: 0.3 to 1000. Default: No blur.
 - `gam`: Gamma correction. Range: 1.0 to 3.0. Default: 2.2.
 - `mod`: Modulate (brightness, saturation, hue) in the format `brightness,saturation,hue`. Default: `1,1,0`.
@@ -39,6 +55,7 @@ Thank you for your support!
 - `q`: Quality of the image. Range: 1 to 100. Default: 80.
 
 ### Currently Not Supported (Coming in Future Updates)
+
 - ~~`fit`: How the image should be resized.~~
 - ~~`cbg`: Contain background color.~~
 - ~~`we`: Without enlargement.~~
@@ -62,5 +79,3 @@ Thank you for your support!
 - ~~`af`: Adaptive filter for PNG.~~
 
 Default values are used if parameters are not specified.
-
-

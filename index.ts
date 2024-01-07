@@ -1,6 +1,7 @@
 import { Hono } from 'hono';
 import sharp from 'sharp';
 import { htmlpage } from './constants';
+import { createCanvas } from '@napi-rs/canvas';
 
 interface QueryParams {
   url?: string;
@@ -42,7 +43,21 @@ interface QueryParams {
   n?: string; // Number of pages
   output?: 'jpg' | 'png' | 'gif' | 'tiff' | 'webp' | 'json' | 'jpeg';
   page?: string;
-  q?: string; // Quality
+  q?: string; // Quality,
+  txtColor?: string; // Text color
+  fontSize?: string; // Font size
+  fontFamily?: string; // Font family
+  text?: string; // Text to render'
+  textAlign?: 'left' | 'center' | 'right';
+  roundedCorners?: boolean;
+  cornerRadius?: number;
+  textBaseline?:
+    | 'top'
+    | 'hanging'
+    | 'middle'
+    | 'alphabetic'
+    | 'ideographic'
+    | 'bottom';
 }
 
 interface Headers {
@@ -181,41 +196,95 @@ const processImage = async (
   return image;
 };
 
+const renderTextToImage = async (text: string, options: QueryParams) => {
+  const width = parseInt(options.w || '800'); // Default width
+  const height = parseInt(options.h || '800'); // Default height
+  const backgroundColor = options.bg || 'white';
+  const textColor = options.txtColor || 'black';
+  const fontSize = options.fontSize || 48; // Default font size
+  const fontFamily = options.fontFamily || 'Arial'; // Default font family
+  const textAlign = options.textAlign || 'center'; // Default text alignment
+  const roundedCorners = options.roundedCorners || false;
+  const cornerRadius = options.cornerRadius || 20; // Default corner radius
+  const textBaseline = options.textBaseline || 'middle';
+
+  const canvas = createCanvas(width, height);
+  const context = canvas.getContext('2d');
+
+  if (roundedCorners) {
+    context.beginPath();
+    context.moveTo(cornerRadius, 0);
+    context.arcTo(width, 0, width, height, cornerRadius);
+    context.arcTo(width, height, 0, height, cornerRadius);
+    context.arcTo(0, height, 0, 0, cornerRadius);
+    context.arcTo(0, 0, width, 0, cornerRadius);
+    context.closePath();
+    context.clip();
+  }
+
+  context.fillStyle = backgroundColor;
+  context.fillRect(0, 0, width, height);
+
+  context.fillStyle = textColor;
+  context.font = `${fontSize}px ${fontFamily}`;
+  context.textAlign = textAlign;
+  context.textBaseline = textBaseline;
+
+  const textY = height / 2;
+
+  context.fillText(text, width / 2, textY);
+
+  return canvas.toBuffer('image/png');
+};
+
 app.get('/', async (c) => {
   const queryParams = c.req.query() as QueryParams;
-  const { url, default: defaultImg, filename, output, encoding } = queryParams;
+  const {
+    text,
+    url,
+    default: defaultImg,
+    filename,
+    output,
+    encoding,
+  } = queryParams;
 
   if (!url) {
-    return c.html(htmlpage);
   }
 
   try {
-    let response = await fetchImage(url, defaultImg);
-    const buffer = Buffer.from(await response.arrayBuffer());
-    if (output === 'json') {
-      const metadata = await fetchMetadata(buffer);
-      return c.json(metadata);
+    let baseImageBuffer;
+    if (url) {
+      let response = await fetchImage(url, defaultImg);
+      baseImageBuffer = Buffer.from(await response.arrayBuffer());
+      if (output === 'json') {
+        const metadata = await fetchMetadata(baseImageBuffer);
+        return c.json(metadata);
+      }
+    } else if (text) {
+      baseImageBuffer = await renderTextToImage(text, queryParams);
     } else {
-      let image = await processImage(buffer, queryParams);
-
-      const headers: Headers = {
-        'Content-Type': `image/${output || 'jpeg'}`,
-        'Cache-Control': `max-age=${queryParams.maxage || '31536000'}`,
-      };
-
-      if (filename) {
-        headers['Content-Disposition'] = `attachment; filename="${filename}"`;
-      }
-
-      if (typeof image === 'string') {
-        // Return Base64 encoded image
-        return c.json({
-          data: `data:image/${output || 'jpeg'};base64,${image}`,
-        });
-      }
-      const processedImage = await image.toBuffer();
-      return new Response(processedImage, { headers });
+      return c.html(htmlpage);
     }
+
+    let image = await processImage(baseImageBuffer!, queryParams);
+
+    const headers: Headers = {
+      'Content-Type': `image/${output || 'jpeg'}`,
+      'Cache-Control': `max-age=${queryParams.maxage || '31536000'}`,
+    };
+
+    if (filename) {
+      headers['Content-Disposition'] = `attachment; filename="${filename}"`;
+    }
+
+    if (typeof image === 'string') {
+      // Return Base64 encoded image
+      return c.json({
+        data: `data:image/${output || 'jpeg'};base64,${image}`,
+      });
+    }
+    const processedImage = await image.toBuffer();
+    return new Response(processedImage, { headers });
   } catch (error) {
     console.error(error);
     return c.json(
