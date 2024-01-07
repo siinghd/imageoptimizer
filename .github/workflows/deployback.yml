@@ -43,8 +43,8 @@ jobs:
         uses: oven-sh/setup-bun@v1
         with: 
           bun-version: "latest"
-      - run: bun install
-      - run: bun build index.ts --outdir ./out --target bun
+      # - run: bun install
+      # - run: bun build index.ts --outdir ./out --target bun
 
   deploy:
     timeout-minutes: 30

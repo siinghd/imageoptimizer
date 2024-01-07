@@ -14,7 +14,6 @@
   },
   "dependencies": {
     "@napi-rs/canvas": "^0.1.44",
-    "@napi-rs/canvas-linux-x64-musl": "^0.1.44",
     "hono": "^3.12.0",
     "sharp": "^0.33.1"
   }
