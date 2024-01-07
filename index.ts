@@ -155,13 +155,6 @@ const processImage = async (
     );
   }
 
-  if (params.blur) {
-    const blurAmount = parseFloat(params.blur);
-    image = image.blur(
-      blurAmount >= 0.3 && blurAmount <= 1000 ? blurAmount : undefined
-    );
-  }
-
   if (params.gam) {
     const gammaValue = parseFloat(params.gam);
     image = image.gamma(
