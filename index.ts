@@ -256,6 +256,15 @@ app.get('/', async (c) => {
     if (url) {
       let response = await fetchImage(url, defaultImg);
       baseImageBuffer = Buffer.from(await response.arrayBuffer());
+      if (text) {
+        // If text is also provided, overlay it onto the image
+        const textOverlayParams = { ...queryParams, bg: 'transparent' };
+        const textBuffer = await renderTextToImage(text, textOverlayParams);
+        baseImageBuffer = await sharp(baseImageBuffer)
+          .composite([{ input: textBuffer, blend: 'over' }])
+          .toBuffer();
+      }
+
       if (output === 'json') {
         const metadata = await fetchMetadata(baseImageBuffer);
         return c.json(metadata);
