@@ -66,9 +66,13 @@ export const htmlpage = `<!DOCTYPE html>
 
       <h2>Query Parameters</h2>
       <ul>
+      
         <li><code>url</code>: The URL of the image to process.</li>
         <li><code>w</code>: Width of the image in pixels. Default: Original image width.</li>
         <li><code>h</code>: Height of the image in pixels. Default: Original image height.</li>
+        <li><code>fit</code>: How the image should be resized.</li>
+        <li><code>cbg</code>: Contain background color.</li>
+        <li><code>we</code>: Without enlargement.</li>
         <li><code>dpr</code>: Device Pixel Ratio. Default: 1.</li>
         <li><code>bg</code>: Background color in hex format (e.g., <code>#ffffff</code>). Default: None (transparent background).</li>
         <li><code>blur</code>: Blur amount. Range: 0.3 to 1000. Default: No blur.</li>
@@ -97,9 +101,6 @@ export const htmlpage = `<!DOCTYPE html>
 
       <h3>Currently Not Supported (Coming in Future Updates)</h3>
       <ul>
-        <li><del><code>fit</code>: How the image should be resized.</del></li>
-        <li><del><code>cbg</code>: Contain background color.</del></li>
-        <li><del><code>we</code>: Without enlargement.</del></li>
         <li><del><code>a</code>: Alignment position.</del></li>
         <li><del><code>fpx</code>: Focal point X.</del></li>
         <li><del><code>fpy</code>: Focal point Y.</del></li>

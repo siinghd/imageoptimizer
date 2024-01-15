@@ -9,8 +9,8 @@ interface QueryParams {
   h?: string;
   dpr?: string;
   fit?: 'inside' | 'outside' | 'cover' | 'fill' | 'contain';
-  //   cbg?: string; // Contain background color
-  //   we?: string; // Without enlargement
+  cbg?: string; // Contain background color
+  we?: string; // Without enlargement
   //   a?: string; // Alignment position
   //   fpx?: string; // Focal point X
   //   fpy?: string; // Focal point Y
@@ -121,10 +121,33 @@ const processImage = async (
   const width = params.w ? parseInt(params.w, 10) : null;
   const height = params.h ? parseInt(params.h, 10) : null;
   const pixelRatio = params.dpr ? parseFloat(params.dpr) : 1;
+  const fitMap = {
+    inside: sharp.fit.inside,
+    outside: sharp.fit.outside,
+    cover: sharp.fit.cover,
+    fill: sharp.fit.fill,
+    contain: sharp.fit.contain,
+  };
+
+  let fitOption: string = sharp.fit.inside;
+
+  if (typeof params.fit === 'string' && fitMap[params.fit]) {
+    fitOption = fitMap[params.fit];
+  }
+
+  const withoutEnlargement = params.we === 'true';
+
+  let backgroundColor: sharp.Color = { r: 0, g: 0, b: 0, alpha: 0 };
+  if (params.fit === 'contain' && params.cbg) {
+    backgroundColor = parseColor(params.cbg);
+  }
+
   if (width || height) {
     image = image.resize({
       width: width ? Math.round(width * pixelRatio) : undefined,
       height: height ? Math.round(height * pixelRatio) : undefined,
+      withoutEnlargement: withoutEnlargement,
+      background: backgroundColor,
     });
   }
 

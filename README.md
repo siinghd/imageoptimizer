@@ -30,6 +30,9 @@ Thank you for your support!
 - `text`: Text to render on the image. Default: None.
 - `w`: Width of the image in pixels. Default: Original image width or 800 for text rendering.
 - `h`: Height of the image in pixels. Default: Original image height or 800 for text rendering.
+- `fit`: How the image should be resized.
+- `cbg`: Contain background color.
+- `we`: Without enlargement.
 - `dpr`: Device Pixel Ratio. Default: 1.
 - `bg`: Background color in hex format (e.g., `#ffffff`). Default: None (transparent background) or white for text rendering.
 - `txtColor`: Text color in hex format. Default: `#000000` (black).
@@ -56,9 +59,6 @@ Thank you for your support!
 
 ### Currently Not Supported (Coming in Future Updates)
 
-- ~~`fit`: How the image should be resized.~~
-- ~~`cbg`: Contain background color.~~
-- ~~`we`: Without enlargement.~~
 - ~~`a`: Alignment position.~~
 - ~~`fpx`: Focal point X.~~
 - ~~`fpy`: Focal point Y.~~
