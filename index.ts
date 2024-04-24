@@ -312,6 +312,9 @@ app.get('/', async (c) => {
     const headers: Headers = {
       'Content-Type': `image/${output || 'jpeg'}`,
       'Cache-Control': `max-age=${queryParams.maxage || '31536000'}`,
+      'Access-Control-Allow-Origin': '*', 
+      'Access-Control-Allow-Methods': '*',
+      'Access-Control-Allow-Headers': '*',
     };
 
     if (filename) {
