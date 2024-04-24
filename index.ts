@@ -1,4 +1,6 @@
 import { Hono } from 'hono';
+import { cors } from 'hono/cors'
+
 import sharp from 'sharp';
 import { htmlpage } from './constants';
 import { createCanvas } from '@napi-rs/canvas';
@@ -67,7 +69,7 @@ interface Headers {
 }
 
 const app = new Hono();
-
+app.use('/api/*', cors());
 const fetchImage = async (url: string, defaultImg?: string) => {
   let response = await fetch(url);
   if (!response.ok && defaultImg) {
