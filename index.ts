@@ -69,7 +69,7 @@ interface Headers {
 }
 
 const app = new Hono();
-app.use('/api/*', cors());
+app.use('*', cors());
 const fetchImage = async (url: string, defaultImg?: string) => {
   let response = await fetch(url);
   if (!response.ok && defaultImg) {
