@@ -10,8 +10,8 @@ module.exports = {
         PORT: 3010, // Application's port
       },
       interpreter: '~/.bun/bin/bun',
-      exec_mode: 'cluster', // Enable cluster mode for load balancing
-      instances: 'max', // Use 'max' to utilize all available cores
+      // exec_mode: 'cluster', // Enable cluster mode for load balancing
+      // instances: 'max', // Use 'max' to utilize all available cores
       autorestart: true, // Automatically restart if the app crashes
       max_memory_restart: '4G', // Restart if memory limit is reached
     },
