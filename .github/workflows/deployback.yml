@@ -121,8 +121,8 @@ jobs:
                 ~/.bun/bin/bun run start-pm2-dev
               else
                 pm2 start pm2.prod.config.cjs
-                pm2 start pm2.prod3011.config.cjs
-                pm2 start pm2.prod3012.config.cjs
-                pm2 start pm2.prod3013.config.cjs
+                pm2 start pm2.prod6011.config.cjs
+                pm2 start pm2.prod6012.config.cjs
+                pm2 start pm2.prod6013.config.cjs
               fi
 
