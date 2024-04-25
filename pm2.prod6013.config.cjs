@@ -7,7 +7,7 @@ module.exports = {
       watch: false, // Enable watching of file changes (set to false in production)
       env: {
         NODE_ENV: 'production', // Set NODE_ENV for production
-        PORT: 3013, // Application's port
+        PORT: 6013, // Application's port
       },
       interpreter: '/home/dev/.bun/bin/bun',
       // exec_mode: 'cluster', // Enable cluster mode for load balancing
